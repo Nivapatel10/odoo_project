@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StackIt - Q&A Community Platform</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="logo">
+                    <i class="fas fa-layer-group"></i>
+                    <span>StackIt</span>
+                </div>
+            </div>
+            
+            <div class="nav-search">
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search questions, tags, or topics..." id="searchInput">
+                </div>
+            </div>
+            
+            <div class="nav-actions">
+                <button class="notification-btn" id="notificationBtn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge" id="notificationBadge">3</span>
+                </button>
+                <button class="btn btn-primary" id="askQuestionBtn">
+                    <i class="fas fa-plus"></i>
+                    Ask Question
+                </button>
+                <div class="user-menu">
+                    <button class="user-avatar" id="userMenuBtn">
+                        <i class="fas fa-user"></i>
+                    </button>
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="#" onclick="showProfile()">Profile</a>
+                        <a href="#" onclick="showAuth()">Sign In</a>
+                        <a href="#" onclick="showAdmin()">Admin Panel</a>
+                        <hr>
+                        <a href="#" onclick="logout()">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Notification Dropdown -->
+    <div class="notification-dropdown" id="notificationDropdown">
+        <div class="notification-header">
+            <h3>Notifications</h3>
+            <button class="mark-all-read">Mark all as read</button>
+        </div>
+        <div class="notification-list">
+            <div class="notification-item unread">
+                <div class="notification-icon">
+                    <i class="fas fa-comment text-blue"></i>
+                </div>
+                <div class="notification-content">
+                    <p><strong>Sarah Chen</strong> answered your question</p>
+                    <span class="notification-time">2 hours ago</span>
+                </div>
+            </div>
+            <div class="notification-item unread">
+                <div class="notification-icon">
+                    <i class="fas fa-arrow-up text-green"></i>
+                </div>
+                <div class="notification-content">
+                    <p>Your answer received 5 upvotes</p>
+                    <span class="notification-time">4 hours ago</span>
+                </div>
+            </div>
+            <div class="notification-item">
+                <div class="notification-icon">
+                    <i class="fas fa-check-circle text-purple"></i>
+                </div>
+                <div class="notification-content">
+                    <p>Your answer was accepted</p>
+                    <span class="notification-time">1 day ago</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Home Page -->
+        <div class="page active" id="homePage">
+            <div class="container">
+                <div class="content-grid">
+                    <!-- Questions List -->
+                    <div class="questions-section">
+                        <div class="section-header">
+                            <div class="header-left">
+                                <h1 class="gradient-text">All Questions</h1>
+                                <p class="question-count" id="questionCount">Loading questions...</p>
+                            </div>
+                            <div class="header-right">
+                                <select class="sort-select" id="sortSelect">
+                                    <option value="newest">Newest</option>
+                                    <option value="oldest">Oldest</option>
+                                    <option value="votes">Most Votes</option>
+                                    <option value="answers">Most Answers</option>
+                                    <option value="views">Most Views</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="questions-list" id="questionsList">
+                            <!-- Questions will be loaded here -->
+                        </div>
+                    </div>
+
+                    <!-- Sidebar -->
+                    <div class="sidebar">
+                        <!-- Popular Tags -->
+                        <div class="sidebar-card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-fire text-orange"></i> Popular Tags</h3>
+                            </div>
+                            <div class="tags-list" id="popularTags">
+                                <!-- Tags will be loaded here -->
+                            </div>
+                        </div>
+
+                        <!-- Community Stats -->
+                        <div class="sidebar-card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-chart-line text-purple"></i> Community Stats</h3>
+                            </div>
+                            <div class="stats-list">
+                                <div class="stat-item">
+                                    <span class="stat-label">Questions</span>
+                                    <span class="stat-value">12,547</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Answers</span>
+                                    <span class="stat-value">28,934</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Users</span>
+                                    <span class="stat-value">5,672</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Tags</span>
+                                    <span class="stat-value">1,234</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Activity -->
+                        <div class="sidebar-card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-clock text-blue"></i> Recent Activity</h3>
+                            </div>
+                            <div class="activity-list">
+                                <div class="activity-item">
+                                    <div class="activity-dot green"></div>
+                                    <span>New answer on "JWT Authentication"</span>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-dot blue"></div>
+                                    <span>Question about "React Hooks" posted</span>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-dot purple"></div>
+                                    <span>Answer accepted for "CSS Grid"</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ask Question Page -->
+        <div class="page" id="askQuestionPage">
+            <div class="container">
+                <div class="ask-question-container">
+                    <div class="page-header">
+                        <button class="back-btn" onclick="showHome()">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <div>
+                            <h1 class="gradient-text">Ask a Question</h1>
+                            <p>Get help from the community by asking a detailed question</p>
+                        </div>
+                    </div>
+
+                    <div class="ask-form-grid">
+                        <div class="form-section">
+                            <form id="askQuestionForm" class="ask-form">
+                                <div class="form-group">
+                                    <label for="questionTitle">Title <span class="required">*</span></label>
+                                    <input type="text" id="questionTitle" placeholder="e.g., How to implement JWT authentication in React?" required>
+                                    <small>Be specific and imagine you're asking a question to another person</small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Description <span class="required">*</span></label>
+                                    <div class="editor-container">
+                                        <div class="editor-toolbar">
+                                            <button type="button" class="editor-btn" data-command="bold">
+                                                <i class="fas fa-bold"></i>
+                                            </button>
+                                            <button type="button" class="editor-btn" data-command="italic">
+                                                <i class="fas fa-italic"></i>
+                                            </button>
+                                            <button type="button" class="editor-btn" data-command="strikethrough">
+                                                <i class="fas fa-strikethrough"></i>
+                                            </button>
+                                            <div class="toolbar-separator"></div>
+                                            <button type="button" class="editor-btn" data-command="insertUnorderedList">
+                                                <i class="fas fa-list-ul"></i>
+                                            </button>
+                                            <button type="button" class="editor-btn" data-command="insertOrderedList">
+                                                <i class="fas fa-list-ol"></i>
+                                            </button>
+                                            <div class="toolbar-separator"></div>
+                                            <button type="button" class="editor-btn" onclick="insertLink()">
+                                                <i class="fas fa-link"></i>
+                                            </button>
+                                            <button type="button" class="editor-btn" onclick="insertImage()">
+                                                <i class="fas fa-image"></i>
+                                            </button>
+                                            <button type="button" class="editor-btn" onclick="insertEmoji()">
+                                                <i class="fas fa-smile"></i>
+                                            </button>
+                                        </div>
+                                        <div class="editor-tabs">
+                                            <button type="button" class="tab-btn active" onclick="switchEditorTab('write')">Write</button>
+                                            <button type="button" class="tab-btn" onclick="switchEditorTab('preview')">Preview</button>
+                                        </div>
+                                        <div class="editor-content">
+                                            <div id="editor" contenteditable="true" placeholder="Describe your problem in detail. Include what you've tried and what specific help you need..."></div>
+                                            <div id="preview" class="editor-preview" style="display: none;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Tags <span class="required">*</span></label>
+                                    <div class="tags-input-container">
+                                        <div class="selected-tags" id="selectedTags"></div>
+                                        <input type="text" id="tagInput" placeholder="Add a tag (max 5)" maxlength="20">
+                                        <button type="button" class="add-tag-btn" onclick="addTag()">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                    <div class="suggested-tags">
+                                        <p>Suggested tags:</p>
+                                        <div class="tag-suggestions" id="tagSuggestions">
+                                            <span class="tag-suggestion" onclick="addSuggestedTag('React')">React</span>
+                                            <span class="tag-suggestion" onclick="addSuggestedTag('JavaScript')">JavaScript</span>
+                                            <span class="tag-suggestion" onclick="addSuggestedTag('Node.js')">Node.js</span>
+                                            <span class="tag-suggestion" onclick="addSuggestedTag('CSS')">CSS</span>
+                                            <span class="tag-suggestion" onclick="addSuggestedTag('HTML')">HTML</span>
+                                            <span class="tag-suggestion" onclick="addSuggestedTag('Python')">Python</span>
+                                            <span class="tag-suggestion" onclick="addSuggestedTag('TypeScript')">TypeScript</span>
+                                            <span class="tag-suggestion" onclick="addSuggestedTag('Redux')">Redux</span>
+                                        </div>
+                                    </div>
+                                    <small>Add up to 5 tags to describe what your question is about</small>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-paper-plane"></i>
+                                        Post Your Question
+                                    </button>
+                                    <button type="button" class="btn btn-secondary">
+                                        <i class="fas fa-save"></i>
+                                        Save as Draft
+                                    </button>
+                                    <button type="button" class="btn btn-ghost" onclick="showHome()">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="tips-section">
+                            <div class="tip-card">
+                                <h3><i class="fas fa-lightbulb text-yellow"></i> Writing a Good Question</h3>
+                                <ul class="tip-list">
+                                    <li>Summarize your problem in a one-line title</li>
+                                    <li>Describe your problem in more detail</li>
+                                    <li>Describe what you tried and what you expected to happen</li>
+                                    <li>Add relevant tags to help others find your question</li>
+                                </ul>
+                            </div>
+
+                            <div class="tip-card">
+                                <h3><i class="fas fa-code text-green"></i> Formatting Help</h3>
+                                <div class="formatting-help">
+                                    <div class="format-item">
+                                        <code>**bold**</code>
+                                        <span><strong>bold</strong></span>
+                                    </div>
+                                    <div class="format-item">
+                                        <code>*italic*</code>
+                                        <span><em>italic</em></span>
+                                    </div>
+                                    <div class="format-item">
+                                        <code>`code`</code>
+                                        <span><code>code</code></span>
+                                    </div>
+                                    <div class="format-item">
+                                        <code>[link](url)</code>
+                                        <span><a href="#">link</a></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tip-card">
+                                <h3><i class="fas fa-question-circle text-blue"></i> Similar Questions</h3>
+                                <div class="similar-questions">
+                                    <div class="similar-question">
+                                        <a href="#" onclick="showQuestion(1)">How to implement JWT authentication in React?</a>
+                                        <small>15 votes • 3 answers</small>
+                                    </div>
+                                    <div class="similar-question">
+                                        <a href="#" onclick="showQuestion(2)">Best practices for React authentication?</a>
+                                        <small>8 votes • 2 answers</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question Detail Page -->
+        <div class="page" id="questionDetailPage">
+            <div class="container">
+                <div class="question-detail-container">
+                    <div class="page-header">
+                        <button class="back-btn" onclick="showHome()">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                    </div>
+
+                    <div class="question-detail" id="questionDetail">
+                        <!-- Question detail will be loaded here -->
+                    </div>
+
+                    <div class="answers-section" id="answersSection">
+                        <!-- Answers will be loaded here -->
+                    </div>
+
+                    <div class="answer-form-section">
+                        <h3>Your Answer</h3>
+                        <p class="form-description">Thanks for contributing an answer! Please be sure to answer the question and provide details.</p>
+                        
+                        <form id="answerForm" class="answer-form">
+                            <div class="editor-container">
+                                <div class="editor-toolbar">
+                                    <button type="button" class="editor-btn" data-command="bold">
+                                        <i class="fas fa-bold"></i>
+                                    </button>
+                                    <button type="button" class="editor-btn" data-command="italic">
+                                        <i class="fas fa-italic"></i>
+                                    </button>
+                                    <button type="button" class="editor-btn" data-command="strikethrough">
+                                        <i class="fas fa-strikethrough"></i>
+                                    </button>
+                                    <div class="toolbar-separator"></div>
+                                    <button type="button" class="editor-btn" data-command="insertUnorderedList">
+                                        <i class="fas fa-list-ul"></i>
+                                    </button>
+                                    <button type="button" class="editor-btn" data-command="insertOrderedList">
+                                        <i class="fas fa-list-ol"></i>
+                                    </button>
+                                    <div class="toolbar-separator"></div>
+                                    <button type="button" class="editor-btn" onclick="insertLink()">
+                                        <i class="fas fa-link"></i>
+                                    </button>
+                                    <button type="button" class="editor-btn" onclick="insertImage()">
+                                        <i class="fas fa-image"></i>
+                                    </button>
+                                </div>
+                                <div class="editor-content">
+                                    <div id="answerEditor" contenteditable="true" placeholder="Write your answer here..."></div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-paper-plane"></i>
+                                    Post Your Answer
+                                </button>
+                                <button type="button" class="btn btn-secondary">
+                                    <i class="fas fa-save"></i>
+                                    Save Draft
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Authentication Page -->
+        <div class="page" id="authPage">
+            <div class="auth-container">
+                <div class="auth-card">
+                    <div class="auth-header">
+                        <div class="logo large">
+                            <i class="fas fa-layer-group"></i>
+                            <span>StackIt</span>
+                        </div>
+                        <p>Join the developer community</p>
+                    </div>
+
+                    <div class="auth-tabs">
+                        <button class="tab-btn active" onclick="switchAuthTab('signin')">Sign In</button>
+                        <button class="tab-btn" onclick="switchAuthTab('signup')">Sign Up</button>
+                    </div>
+
+                    <!-- Sign In Form -->
+                    <div class="auth-form active" id="signinForm">
+                        <h2>Welcome back</h2>
+                        <p class="form-subtitle">Sign in to your account to continue</p>
+
+                        <div class="social-login">
+                            <button class="social-btn google">
+                                <i class="fab fa-google"></i>
+                                Continue with Google
+                            </button>
+                            <button class="social-btn github">
+                                <i class="fab fa-github"></i>
+                                Continue with GitHub
+                            </button>
+                        </div>
+
+                        <div class="divider">
+                            <span>Or continue with email</span>
+                        </div>
+
+                        <form class="login-form">
+                            <div class="form-group">
+                                <label for="signinEmail">Email</label>
+                                <div class="input-group">
+                                    <i class="fas fa-envelope"></i>
+                                    <input type="email" id="signinEmail" placeholder="Enter your email" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="signinPassword">Password</label>
+                                <div class="input-group">
+                                    <i class="fas fa-lock"></i>
+                                    <input type="password" id="signinPassword" placeholder="Enter your password" required>
+                                    <button type="button" class="password-toggle" onclick="togglePassword('signinPassword')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-options">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="rememberMe">
+                                    <span class="checkmark"></span>
+                                    Remember me
+                                </label>
+                                <a href="#" class="forgot-password">Forgot password?</a>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary full-width">
+                                Sign In
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Sign Up Form -->
+                    <div class="auth-form" id="signupForm">
+                        <h2>Create account</h2>
+                        <p class="form-subtitle">Join the StackIt community today</p>
+
+                        <div class="social-login">
+                            <button class="social-btn google">
+                                <i class="fab fa-google"></i>
+                                Sign up with Google
+                            </button>
+                            <button class="social-btn github">
+                                <i class="fab fa-github"></i>
+                                Sign up with GitHub
+                            </button>
+                        </div>
+
+                        <div class="divider">
+                            <span>Or create account with email</span>
+                        </div>
+
+                        <form class="signup-form">
+                            <div class="form-group">
+                                <label for="signupUsername">Username</label>
+                                <div class="input-group">
+                                    <i class="fas fa-user"></i>
+                                    <input type="text" id="signupUsername" placeholder="Choose a username" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="signupEmail">Email</label>
+                                <div class="input-group">
+                                    <i class="fas fa-envelope"></i>
+                                    <input type="email" id="signupEmail" placeholder="Enter your email" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="signupPassword">Password</label>
+                                <div class="input-group">
+                                    <i class="fas fa-lock"></i>
+                                    <input type="password" id="signupPassword" placeholder="Create a password" required>
+                                    <button type="button" class="password-toggle" onclick="togglePassword('signupPassword')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                                <small>Must be at least 8 characters long</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirm Password</label>
+                                <div class="input-group">
+                                    <i class="fas fa-lock"></i>
+                                    <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
+                                    <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="agreeTerms" required>
+                                    <span class="checkmark"></span>
+                                    I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                                </label>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary full-width">
+                                Create Account
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="auth-footer">
+                        <button class="switch-auth" onclick="switchAuthMode()">
+                            <span id="authSwitchText">Don't have an account? Sign up</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Panel -->
+        <div class="page" id="adminPage">
+            <div class="admin-container">
+                <div class="admin-header">
+                    <div class="admin-nav">
+                        <div class="admin-logo">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Admin Panel</span>
+                        </div>
+                        <button class="back-btn" onclick="showHome()">
+                            <i class="fas fa-arrow-left"></i>
+                            Back to Site
+                        </button>
+                    </div>
+                </div>
+
+                <div class="admin-content">
+                    <div class="admin-stats">
+                        <div class="stat-card">
+                            <div class="stat-icon blue">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>5,672</h3>
+                                <p>Total Users</p>
+                                <span class="stat-change positive">+15.2% this month</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon green">
+                                <i class="fas fa-question-circle"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>12,547</h3>
+                                <p>Questions</p>
+                                <span class="stat-change positive">+47 today</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon purple">
+                                <i class="fas fa-comments"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>28,934</h3>
+                                <p>Answers</p>
+                                <span class="stat-change positive">+89 today</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon red">
+                                <i class="fas fa-flag"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>8</h3>
+                                <p>Pending Reports</p>
+                                <span class="stat-change negative">+3 today</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="admin-tabs">
+                        <button class="admin-tab-btn active" onclick="switchAdminTab('overview')">Overview</button>
+                        <button class="admin-tab-btn" onclick="switchAdminTab('users')">Users</button>
+                        <button class="admin-tab-btn" onclick="switchAdminTab('content')">Content</button>
+                        <button class="admin-tab-btn" onclick="switchAdminTab('reports')">Reports (8)</button>
+                        <button class="admin-tab-btn" onclick="switchAdminTab('analytics')">Analytics</button>
+                    </div>
+
+                    <div class="admin-tab-content">
+                        <!-- Overview Tab -->
+                        <div class="admin-tab active" id="overviewTab">
+                            <div class="admin-grid">
+                                <div class="admin-card">
+                                    <h3><i class="fas fa-clock text-blue"></i> Recent Activity</h3>
+                                    <div class="activity-feed">
+                                        <div class="activity-item">
+                                            <div class="activity-dot green"></div>
+                                            <div class="activity-content">
+                                                <p>New user registered: <strong>newdev2024</strong></p>
+                                                <span class="activity-time">5 minutes ago</span>
+                                            </div>
+                                        </div>
+                                        <div class="activity-item">
+                                            <div class="activity-dot blue"></div>
+                                            <div class="activity-content">
+                                                <p>Question posted: <strong>"React Hooks best practices"</strong></p>
+                                                <span class="activity-time">15 minutes ago</span>
+                                            </div>
+                                        </div>
+                                        <div class="activity-item">
+                                            <div class="activity-dot red"></div>
+                                            <div class="activity-content">
+                                                <p>Content reported: <strong>Spam question</strong></p>
+                                                <span class="activity-time">1 hour ago</span>
+                                            </div>
+                                        </div>
+                                        <div class="activity-item">
+                                            <div class="activity-dot purple"></div>
+                                            <div class="activity-content">
+                                                <p>Answer accepted: <strong>JWT Authentication</strong></p>
+                                                <span class="activity-time">2 hours ago</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="admin-card">
+                                    <h3><i class="fas fa-tools text-orange"></i> Quick Actions</h3>
+                                    <div class="quick-actions">
+                                        <button class="action-btn primary">
+                                            <i class="fas fa-bullhorn"></i>
+                                            Send Platform Announcement
+                                        </button>
+                                        <button class="action-btn secondary">
+                                            <i class="fas fa-chart-bar"></i>
+                                            Generate Analytics Report
+                                        </button>
+                                        <button class="action-btn secondary">
+                                            <i class="fas fa-cog"></i>
+                                            Platform Settings
+                                        </button>
+                                        <button class="action-btn secondary">
+                                            <i class="fas fa-shield-alt"></i>
+                                            Security Audit
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Users Tab -->
+                        <div class="admin-tab" id="usersTab">
+                            <div class="admin-card">
+                                <div class="card-header">
+                                    <h3>User Management</h3>
+                                    <div class="header-actions">
+                                        <div class="search-box">
+                                            <i class="fas fa-search"></i>
+                                            <input type="text" placeholder="Search users...">
+                                        </div>
+                                        <select class="filter-select">
+                                            <option>All Users</option>
+                                            <option>Active</option>
+                                            <option>New</option>
+                                            <option>Suspended</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="users-table">
+                                    <div class="user-row">
+                                        <div class="user-info">
+                                            <div class="user-avatar">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                            <div class="user-details">
+                                                <h4>newdev2024</h4>
+                                                <p>newdev@example.com</p>
+                                                <small>Joined 2024-01-15 • 15 reputation • 2 questions • 1 answer</small>
+                                            </div>
+                                        </div>
+                                        <div class="user-actions">
+                                            <span class="status-badge active">Active</span>
+                                            <button class="action-btn-sm"><i class="fas fa-eye"></i></button>
+                                            <button class="action-btn-sm danger"><i class="fas fa-ban"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="user-row">
+                                        <div class="user-info">
+                                            <div class="user-avatar">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                            <div class="user-details">
+                                                <h4>codemaster</h4>
+                                                <p>master@example.com</p>
+                                                <small>Joined 2024-01-14 • 450 reputation • 8 questions • 23 answers</small>
+                                            </div>
+                                        </div>
+                                        <div class="user-actions">
+                                            <span class="status-badge active">Active</span>
+                                            <button class="action-btn-sm"><i class="fas fa-eye"></i></button>
+                                            <button class="action-btn-sm danger"><i class="fas fa-ban"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="user-row">
+                                        <div class="user-info">
+                                            <div class="user-avatar">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                            <div class="user-details">
+                                                <h4>suspicioususer</h4>
+                                                <p>suspicious@example.com</p>
+                                                <small>Joined 2024-01-13 • -5 reputation • 0 questions • 0 answers</small>
+                                            </div>
+                                        </div>
+                                        <div class="user-actions">
+                                            <span class="status-badge suspended">Suspended</span>
+                                            <button class="action-btn-sm"><i class="fas fa-eye"></i></button>
+                                            <button class="action-btn-sm danger"><i class="fas fa-ban"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Content Tab -->
+                        <div class="admin-tab" id="contentTab">
+                            <div class="admin-card">
+                                <h3>Content Management</h3>
+                                <div class="content-table">
+                                    <div class="content-row">
+                                        <div class="content-info">
+                                            <h4>How to implement JWT authentication in React?</h4>
+                                            <p>by John Doe</p>
+                                            <div class="content-stats">
+                                                <span>45 votes</span>
+                                                <span>8 answers</span>
+                                                <span>1,234 views</span>
+                                            </div>
+                                        </div>
+                                        <div class="content-actions">
+                                            <span class="status-badge active">Active</span>
+                                            <button class="action-btn-sm"><i class="fas fa-eye"></i></button>
+                                            <button class="action-btn-sm danger"><i class="fas fa-trash"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="content-row">
+                                        <div class="content-info">
+                                            <h4>Best practices for React component optimization?</h4>
+                                            <p>by Sarah Chen</p>
+                                            <div class="content-stats">
+                                                <span>38 votes</span>
+                                                <span>12 answers</span>
+                                                <span>987 views</span>
+                                            </div>
+                                        </div>
+                                        <div class="content-actions">
+                                            <span class="status-badge active">Active</span>
+                                            <button class="action-btn-sm"><i class="fas fa-eye"></i></button>
+                                            <button class="action-btn-sm danger"><i class="fas fa-trash"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="content-row flagged">
+                                        <div class="content-info">
+                                            <h4>Spam question about making money online</h4>
+                                            <p>by SpamUser123</p>
+                                            <div class="content-stats">
+                                                <span>-5 votes</span>
+                                                <span>0 answers</span>
+                                                <span>23 views</span>
+                                            </div>
+                                        </div>
+                                        <div class="content-actions">
+                                            <span class="status-badge flagged">Flagged</span>
+                                            <button class="action-btn-sm"><i class="fas fa-eye"></i></button>
+                                            <button class="action-btn-sm danger"><i class="fas fa-trash"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Reports Tab -->
+                        <div class="admin-tab" id="reportsTab">
+                            <div class="admin-card">
+                                <h3><i class="fas fa-flag text-red"></i> Content Reports</h3>
+                                <div class="reports-list">
+                                    <div class="report-item">
+                                        <div class="report-header">
+                                            <div class="report-badges">
+                                                <span class="badge question">Question</span>
+                                                <span class="badge pending">Pending</span>
+                                            </div>
+                                            <span class="report-time">2 hours ago</span>
+                                        </div>
+                                        <h4>Spam question about cryptocurrency</h4>
+                                        <p><strong>Reported by:</strong> John Doe • <strong>Against:</strong> SpamUser123</p>
+                                        <p><strong>Reason:</strong> Spam/Promotional content</p>
+                                        <div class="report-actions">
+                                            <button class="btn btn-success btn-sm">
+                                                <i class="fas fa-check"></i> Approve
+                                            </button>
+                                            <button class="btn btn-danger btn-sm">
+                                                <i class="fas fa-times"></i> Remove Content
+                                            </button>
+                                            <button class="btn btn-secondary btn-sm">
+                                                <i class="fas fa-eye"></i> Investigate
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="report-item">
+                                        <div class="report-header">
+                                            <div class="report-badges">
+                                                <span class="badge answer">Answer</span>
+                                                <span class="badge pending">Pending</span>
+                                            </div>
+                                            <span class="report-time">4 hours ago</span>
+                                        </div>
+                                        <h4>Inappropriate language in answer</h4>
+                                        <p><strong>Reported by:</strong> Sarah Chen • <strong>Against:</strong> BadUser456</p>
+                                        <p><strong>Reason:</strong> Inappropriate content</p>
+                                        <div class="report-actions">
+                                            <button class="btn btn-success btn-sm">
+                                                <i class="fas fa-check"></i> Approve
+                                            </button>
+                                            <button class="btn btn-danger btn-sm">
+                                                <i class="fas fa-times"></i> Remove Content
+                                            </button>
+                                            <button class="btn btn-secondary btn-sm">
+                                                <i class="fas fa-eye"></i> Investigate
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="report-item resolved">
+                                        <div class="report-header">
+                                            <div class="report-badges">
+                                                <span class="badge user">User</span>
+                                                <span class="badge resolved">Resolved</span>
+                                            </div>
+                                            <span class="report-time">1 day ago</span>
+                                        </div>
+                                        <h4>Harassment in comments</h4>
+                                        <p><strong>Reported by:</strong> Mike Johnson • <strong>Against:</strong> TrollUser789</p>
+                                        <p><strong>Reason:</strong> Harassment/Abuse</p>
+                                        <div class="resolution-note">
+                                            <i class="fas fa-check-circle text-green"></i>
+                                            <span>User has been suspended and content removed</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Analytics Tab -->
+                        <div class="admin-tab" id="analyticsTab">
+                            <div class="admin-card">
+                                <h3>Platform Analytics</h3>
+                                <div class="analytics-grid">
+                                    <div class="analytics-section">
+                                        <h4>User Engagement</h4>
+                                        <div class="metric-list">
+                                            <div class="metric-item">
+                                                <span class="metric-label">Daily Active Users</span>
+                                                <span class="metric-value">1,234</span>
+                                            </div>
+                                            <div class="metric-item">
+                                                <span class="metric-label">Questions per Day</span>
+                                                <span class="metric-value">47</span>
+                                            </div>
+                                            <div class="metric-item">
+                                                <span class="metric-label">Answers per Day</span>
+                                                <span class="metric-value">89</span>
+                                            </div>
+                                            <div class="metric-item">
+                                                <span class="metric-label">User Retention</span>
+                                                <span class="metric-value">78%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="analytics-section">
+                                        <h4>Content Quality</h4>
+                                        <div class="metric-list">
+                                            <div class="metric-item">
+                                                <span class="metric-label">Accepted Answers</span>
+                                                <span class="metric-value">65%</span>
+                                            </div>
+                                            <div class="metric-item">
+                                                <span class="metric-label">Average Question Score</span>
+                                                <span class="metric-value">4.2</span>
+                                            </div>
+                                            <div class="metric-item">
+                                                <span class="metric-label">Spam Detection Rate</span>
+                                                <span class="metric-value">99.2%</span>
+                                            </div>
+                                            <div class="metric-item">
+                                                <span class="metric-label">Report Resolution Time</span>
+                                                <span class="metric-value">2.4h</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="export-section">
+                                    <h4>Export Reports</h4>
+                                    <div class="export-buttons">
+                                        <button class="btn btn-secondary">
+                                            <i class="fas fa-chart-bar"></i>
+                                            User Activity Report
+                                        </button>
+                                        <button class="btn btn-secondary">
+                                            <i class="fas fa-chart-line"></i>
+                                            Content Analytics Report
+                                        </button>
+                                        <button class="btn btn-secondary">
+                                            <i class="fas fa-shield-alt"></i>
+                                            Moderation Report
+                                        </button>
+                                        <button class="btn btn-secondary">
+                                            <i class="fas fa-tachometer-alt"></i>
+                                            Performance Report
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Loading...</p>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
