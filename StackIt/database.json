@@ -1,0 +1,233 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "demo_user",
+      "email": "demo@stackit.com",
+      "password": "hashed_password",
+      "reputation": 1250,
+      "role": "user",
+      "createdAt": "2024-01-01T00:00:00.000Z",
+      "isActive": true,
+      "profile": {
+        "bio": "Full-stack developer passionate about React and Node.js",
+        "location": "San Francisco, CA",
+        "website": "https://example.com",
+        "avatar": null
+      }
+    },
+    {
+      "id": 2,
+      "username": "admin",
+      "email": "admin@stackit.com",
+      "password": "hashed_admin123",
+      "reputation": 5000,
+      "role": "admin",
+      "createdAt": "2023-12-01T00:00:00.000Z",
+      "isActive": true,
+      "profile": {
+        "bio": "Platform administrator",
+        "location": "Remote",
+        "website": null,
+        "avatar": null
+      }
+    },
+    {
+      "id": 3,
+      "username": "sarah_chen",
+      "email": "sarah@example.com",
+      "password": "hashed_password123",
+      "reputation": 2840,
+      "role": "user",
+      "createdAt": "2024-01-05T00:00:00.000Z",
+      "isActive": true,
+      "profile": {
+        "bio": "Senior React developer with 5+ years experience",
+        "location": "New York, NY",
+        "website": "https://sarahchen.dev",
+        "avatar": null
+      }
+    }
+  ],
+  "questions": [
+    {
+      "id": 1,
+      "title": "How to implement JWT authentication in React?",
+      "content": "I'm building a React application and need to implement JWT authentication. What's the best approach for handling tokens, storing them securely, and managing user sessions?",
+      "authorId": 1,
+      "tags": ["React", "JWT", "Authentication", "JavaScript"],
+      "votes": 45,
+      "views": 1234,
+      "createdAt": "2024-01-13T10:30:00.000Z",
+      "updatedAt": "2024-01-13T10:30:00.000Z",
+      "isActive": true,
+      "acceptedAnswerId": 1
+    },
+    {
+      "id": 2,
+      "title": "Best practices for React component optimization?",
+      "content": "My React app is getting slow with large lists. What are the best practices for optimizing React components and improving performance?",
+      "authorId": 1,
+      "tags": ["React", "Performance", "Optimization", "JavaScript"],
+      "votes": 38,
+      "views": 987,
+      "createdAt": "2024-01-12T14:20:00.000Z",
+      "updatedAt": "2024-01-12T14:20:00.000Z",
+      "isActive": true,
+      "acceptedAnswerId": null
+    },
+    {
+      "id": 3,
+      "title": "How to handle async operations in Redux?",
+      "content": "I'm confused about handling asynchronous operations in Redux. Should I use Redux Thunk, Redux Saga, or something else?",
+      "authorId": 3,
+      "tags": ["Redux", "Async", "JavaScript", "State Management"],
+      "votes": 23,
+      "views": 654,
+      "createdAt": "2024-01-10T09:15:00.000Z",
+      "updatedAt": "2024-01-10T09:15:00.000Z",
+      "isActive": true,
+      "acceptedAnswerId": null
+    }
+  ],
+  "answers": [
+    {
+      "id": 1,
+      "questionId": 1,
+      "content": "Here's a comprehensive approach to JWT authentication in React:\n\n1. **Token Storage**: Store JWT tokens in httpOnly cookies for security\n2. **Axios Interceptors**: Use interceptors to automatically attach tokens\n3. **Protected Routes**: Create a PrivateRoute component\n4. **Token Refresh**: Implement automatic token refresh\n\n```javascript\n// Example implementation\nconst useAuth = () => {\n  const [user, setUser] = useState(null);\n  \n  const login = async (credentials) => {\n    const response = await api.post('/auth/login', credentials);\n    setUser(response.data.user);\n  };\n  \n  return { user, login };\n};\n```",
+      "authorId": 2,
+      "votes": 32,
+      "createdAt": "2024-01-14T11:45:00.000Z",
+      "updatedAt": "2024-01-14T11:45:00.000Z",
+      "isActive": true
+    },
+    {
+      "id": 2,
+      "questionId": 2,
+      "content": "For React performance optimization, consider these strategies:\n\n1. **React.memo()** for component memoization\n2. **useMemo()** and **useCallback()** for expensive calculations\n3. **Virtual scrolling** for large lists\n4. **Code splitting** with React.lazy()\n5. **Profiler** to identify bottlenecks\n\nExample with React.memo:\n```javascript\nconst ExpensiveComponent = React.memo(({ data }) => {\n  return <div>{/* expensive rendering */}</div>;\n});\n```",
+      "authorId": 3,
+      "votes": 28,
+      "createdAt": "2024-01-13T16:30:00.000Z",
+      "updatedAt": "2024-01-13T16:30:00.000Z",
+      "isActive": true
+    }
+  ],
+  "votes": [
+    {
+      "id": 1,
+      "userId": 2,
+      "targetType": "question",
+      "targetId": 1,
+      "direction": "up",
+      "createdAt": "2024-01-14T12:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "userId": 3,
+      "targetType": "answer",
+      "targetId": 1,
+      "direction": "up",
+      "createdAt": "2024-01-14T12:30:00.000Z"
+    }
+  ],
+  "tags": [
+    {
+      "name": "React",
+      "count": 1234,
+      "description": "A JavaScript library for building user interfaces"
+    },
+    {
+      "name": "JavaScript",
+      "count": 2345,
+      "description": "A programming language that conforms to the ECMAScript specification"
+    },
+    {
+      "name": "Node.js",
+      "count": 987,
+      "description": "A JavaScript runtime built on Chrome's V8 JavaScript engine"
+    },
+    {
+      "name": "CSS",
+      "count": 876,
+      "description": "A style sheet language used for describing the presentation of a document"
+    },
+    {
+      "name": "HTML",
+      "count": 765,
+      "description": "The standard markup language for documents designed to be displayed in a web browser"
+    },
+    {
+      "name": "Python",
+      "count": 654,
+      "description": "A high-level, interpreted programming language"
+    },
+    {
+      "name": "TypeScript",
+      "count": 543,
+      "description": "A programming language developed and maintained by Microsoft"
+    },
+    {
+      "name": "Redux",
+      "count": 432,
+      "description": "A predictable state container for JavaScript apps"
+    }
+  ],
+  "notifications": [
+    {
+      "id": 1,
+      "userId": 1,
+      "type": "answer",
+      "title": "New answer on your question",
+      "message": "Sarah Chen answered your question about JWT authentication",
+      "isRead": false,
+      "createdAt": "2024-01-14T11:45:00.000Z",
+      "relatedId": 1,
+      "relatedType": "answer"
+    },
+    {
+      "id": 2,
+      "userId": 1,
+      "type": "vote",
+      "title": "Your answer received upvotes",
+      "message": "Your answer received 5 upvotes",
+      "isRead": false,
+      "createdAt": "2024-01-14T10:30:00.000Z",
+      "relatedId": 1,
+      "relatedType": "answer"
+    },
+    {
+      "id": 3,
+      "userId": 1,
+      "type": "accepted",
+      "title": "Your answer was accepted",
+      "message": "Your answer was marked as the accepted solution",
+      "isRead": true,
+      "createdAt": "2024-01-13T15:20:00.000Z",
+      "relatedId": 1,
+      "relatedType": "answer"
+    }
+  ],
+  "reports": [
+    {
+      "id": 1,
+      "reporterId": 2,
+      "targetType": "question",
+      "targetId": 3,
+      "reason": "spam",
+      "description": "This question appears to be promotional content",
+      "status": "pending",
+      "createdAt": "2024-01-14T09:00:00.000Z",
+      "resolvedAt": null,
+      "resolvedBy": null
+    }
+  ],
+  "sessions": [
+    {
+      "token": "token_1_1705234567890",
+      "userId": 1,
+      "createdAt": "2024-01-14T12:00:00.000Z",
+      "expiresAt": "2024-01-15T12:00:00.000Z",
+      "isActive": true
+    }
+  ]
+}
